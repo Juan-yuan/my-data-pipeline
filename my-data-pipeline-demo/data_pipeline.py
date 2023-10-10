@@ -13,7 +13,6 @@ table = dynamodb.Table(os.environ['DYNAMO_TABLE'])
 tz_sydney = timezone(os.environ['TZ_LOCAL'])
 
 def run(event, context):
-    date = datetime.now(tz_sydney).strftime("%Y-%m-%d-%H-%M-%S")
     print("Started\t\t" + str(event))
     records = event['Records']
     for record in records:
@@ -22,6 +21,7 @@ def run(event, context):
         process_data(bucket, key, local_file)
 
 def process_data(bucket, key, file):
+    date = datetime.now(tz_sydney).strftime("%Y-%m-%d-%H-%M-%S")
     s3get(bucket, key, file)
     with open(file, mode='r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
